@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:body>
+	<h1>Novo Grupo</h1>
+	<h:form>
+		<fieldset>
+			<legend>Dados do Grupo</legend>
+			<h:panelGrid>
+				<h:outputText value="Nome" for="nome" />
+				<h:inputText id="nome" value="#{grupoController.grupo.nome}" />				
+			</h:panelGrid>
+		</fieldset>
+
+		<fieldset>
+			<legend>Dados da Funcionalidade</legend>
+			<h:panelGrid columns="3">
+				<h:outputText value="Funcionalidade" for="funcionalidade" />
+				
+				<h:selectOneMenu id="funcionalidade" value="#{grupoController.funcionalidadeId}">
+					<f:selectItem itemLabel="Selecionar" noSelectionOption="true" />
+					<f:selectItems value="#{grupoController.todasFuncionalidades}" var="funcionalidade" itemLabel="#{funcionalidade.nome}" itemValue="#{funcionalidade.id}" />
+				</h:selectOneMenu>
+
+				<h:commandButton value="Gravar Funcionalidade"  
+				action="#{grupoController.gravarFuncionalidade}"/>
+				
+				<h:dataTable value="#{grupoController.funcionalidadesDoGrupo}"
+				var="funcionalidade">
+					<h:column>
+						<f:facet name="header">Nome</f:facet>
+						<h:outputText value="#{funcionalidade.nome}"/>
+					</h:column>
+					<h:column>
+						<f:facet name="header">Remover</f:facet>
+						<h:commandLink value="x" 
+						action="#{grupoController.remover(funcionalidade)}"/>
+					</h:column>
+				</h:dataTable>
+			</h:panelGrid>
+		</fieldset>
+		
+		<h:commandButton value="Gravar" action="#{grupoController.gravar}" />
+	</h:form>
+	
+	<h:form>
+		<h:dataTable value="#{grupoController.todosGrupos}" var="grupo">
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{grupo.nome}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Alterar</f:facet>
+				<h:commandLink value="altera" action="#{grupoController.carregar(grupo)}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Remover</f:facet>
+				<h:commandLink value="remove" action="#{grupoController.remover(grupo)}"/>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</h:body>
+
+</html>

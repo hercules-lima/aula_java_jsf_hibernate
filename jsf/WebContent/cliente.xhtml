@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:body>
+	<h1>Novo Cliente</h1>
+	<h:form>
+	<h:messages/>
+	<fieldset>
+	<legend>Dados do Cliente</legend>
+	<h:panelGrid>
+		<h:outputText value="Nome" for="nome"/>
+		<h:inputText id="nome" 
+			value="#{clienteController.cliente.nome}"/>
+			
+		<h:outputText value="Sexo" for="sexo"/>
+		<h:selectOneRadio id="sexo" 
+		value="#{clienteController.cliente.sexo}">
+			<f:selectItems value="#{clienteController.sexos}"
+			var="sexo" itemLabel="#{sexo.descricao}" 
+			itemValue="#{sexo}"/>
+		</h:selectOneRadio>
+		
+		<h:outputText value="E-mail" for="email"/>
+		<h:inputText id="email" 
+			value="#{clienteController.cliente.email}">
+			<f:passThroughAttribute name="type" value="email"/>
+		</h:inputText>
+			
+		<h:outputText value="Data Cadastro" for="dtCadastro"/>
+		<h:inputText id="dtCadastro" 
+			value="#{clienteController.cliente.dtCadastro.time}">
+			<f:passThroughAttribute name="type" value="date"/>
+			<f:convertDateTime pattern="yyyy-MM-dd" 
+			timeZone="America/Sao_Paulo"/>
+		</h:inputText>
+		
+		<h:commandButton value="Gravar" 
+			action="#{clienteController.gravar()}"/>		
+	</h:panelGrid>
+	</fieldset>
+	</h:form>
+	
+	<h:form>
+		<h:dataTable value="#{clienteController.todosClientes}" 
+		var="cliente">
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{cliente.nome}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Data Cadastro</f:facet>
+				<h:outputText value="#{cliente.dtCadastro.time}">
+					<f:convertDateTime pattern="dd/MM/yyyy" 
+					timeZone="America/Sao_Paulo"/>
+				</h:outputText>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Remover</f:facet>
+				<h:commandLink value="remove" 
+				action="#{clienteController.remover(cliente)}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Alterar</f:facet>
+				<h:commandLink value="altera" 
+				action="#{clienteController.carregar(cliente)}"/>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</h:body>
+
+</html>

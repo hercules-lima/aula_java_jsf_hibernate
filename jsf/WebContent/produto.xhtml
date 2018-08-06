@@ -1,0 +1,157 @@
+<?xml version="1.0" ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+xmlns:h="http://xmlns.jcp.org/jsf/html"
+xmlns:f="http://xmlns.jcp.org/jsf/core"
+xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+
+<ui:composition template="_template2.xhtml">
+
+	<ui:define name="titulo_pagina">Produto</ui:define>
+	
+	<ui:define name="conteudo">
+	
+		<div class="container">
+			<div class="row">
+				<div class="col">
+					<h:messages id="msg" class="alert alert-danger alerta"/>
+				</div>
+			</div>
+			
+			<div class="row">
+				<div class="col">
+					<div class="card">
+						<div class="card-header">Novo Produto</div>
+						<div class="card-body">
+						<h:form>
+							<div class="form-group">
+								<h:outputLabel value="Nome" for="nome"/>
+								<h:inputText  class="form-control" id="nome" 
+									value="#{produtoController.produto.nome}"
+									required="true"
+									requiredMessage="Nome obrigatório."
+									validatorMessage="Nome do produto com mais de 30 caracteres.">
+									<f:validateLength maximum="30"/>
+									<f:ajax event="blur" render="msg"/> 
+								</h:inputText>
+							</div>
+							
+							<div class="form-row">
+								<div class="form-group col-md-4">
+									<h:outputLabel value="Quantidade" for="qtde"/>
+									<h:inputText id="qtde" class="form-control"
+										value="#{produtoController.produto.qtde}"
+										required="true" 
+										requiredMessage="Quantidade obrigatória.">
+										<f:passThroughAttribute name="type" value="number"/>
+										<f:passThroughAttribute name="min" value="0"/>
+										<f:ajax event="blur" render="msg"/> 
+									</h:inputText>
+								</div>
+								
+								<div class="form-group col-md-4">
+									<h:outputLabel value="Quantidade Mínima" for="qtdeMin"/>
+									<h:inputText id="qtdeMin" class="form-control"
+										value="#{produtoController.produto.qtdeMin}"
+										required="true"
+										requiredMessage="Quantidade mínima obrigatória.">
+										<f:passThroughAttribute name="type" value="number"/>
+										<f:passThroughAttribute name="min" value="0"/>
+										<f:ajax event="blur" render="msg"/> 
+									</h:inputText>
+								</div>
+								<div class="form-group col-md-4">
+									<h:outputLabel value="Valor" for="valor"/>
+									<h:inputText id="valor" class="form-control"
+										value="#{produtoController.produto.valor}"
+										required="true"
+										requiredMessage="Valor obrigatório.">
+										<f:passThroughAttribute name="type" value="number"/>
+										<f:passThroughAttribute name="min" value="0"/>
+										<f:passThroughAttribute name="step" value="0.1"/>
+										<f:ajax event="blur" render="msg"/> 
+									</h:inputText>
+								</div>
+							</div>
+							
+							<div class="form-group">
+								<h:outputLabel value="Selecione um tipo" for="tipo"/>
+								<h:selectOneMenu class="form-control" id="tipo" value="#{produtoController.tipoId}">
+									<f:selectItem itemLabel="Selecionar" noSelectionOption="true"/>
+									<f:selectItems value="#{produtoController.todosTipos}"
+									var="tipo" itemLabel="#{tipo.nome}" itemValue="#{tipo.id}"/>
+									<f:ajax event="blur" render="msg"/> 
+								</h:selectOneMenu>	
+							</div>
+							
+								
+							<h:commandButton value="Gravar" class="btn btn-primary"
+							action="#{produtoController.gravar}">
+								<f:ajax execute="@form" 
+								render="@form :formProdutos:tabelaProdutos msg"/>
+							</h:commandButton>
+							
+							<h:commandLink value="Cadastrar novo Tipo" 
+							class="btn btn-link"
+							action="tipo?faces-redirect=true" immediate="true"/>
+						</h:form>
+						
+						</div>
+					</div>
+				</div>
+			</div>
+			
+			<div class="row my-3">
+				<div class="col">
+					<div class="card">
+						<div class="card-header">Produtos Cadastrados</div>
+						<div class="card-body">
+						
+		<h:form id="formProdutos">
+		<h:dataTable class="table table-hover"
+		value="#{produtoController.todosProdutos}" 
+		var="produto" id="tabelaProdutos">
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{produto.nome}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Tipo</f:facet>
+				<h:outputText value="#{produto.tipo.nome}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Quantidade</f:facet>
+				<h:outputText value="#{produto.qtde}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Quantidade Mínima</f:facet>
+				<h:outputText value="#{produto.qtdeMin}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Valor</f:facet>
+				<h:outputText value="#{produto.valor}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Alterar</f:facet>
+				<h:commandLink value="altera" class="btn btn-success"
+				action="#{produtoController.carregar(produto)}"/>
+			</h:column>
+			<h:column>
+				<f:facet name="header">Remover</f:facet>
+				<h:commandLink value="remove" class="btn btn-danger"
+				action="#{produtoController.remover(produto)}"/>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+						
+						
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+</ui:define>
+</ui:composition>
+
+</html>

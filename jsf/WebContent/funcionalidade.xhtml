@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core">
+	
+<h:body>
+	<h1>Nova Funcionalidade</h1>
+	
+	<h:form>
+		<fieldset>
+			<legend>Dados da Funcionalidade</legend>
+			<h:panelGrid>
+				<h:outputText value="Nome" for="nome"/>
+				<h:inputText id="nome" value="#{funcionalidadeController.funcionalidade.nome}"/>
+				
+				<h:outputText value="Página" for="pagina"/>
+				<h:inputText id="pagina" value="#{funcionalidadeController.funcionalidade.pagina}"/>
+				
+				<h:commandButton value="Gravar" action="#{funcionalidadeController.gravar}"/>
+			</h:panelGrid>
+		</fieldset>
+	</h:form>
+	
+	<h:form>
+		<h:dataTable value="#{funcionalidadeController.todasFuncionalidades}" var="funcionalidade">
+			<h:column>
+				<f:facet name="header">Nome</f:facet>
+				<h:outputText value="#{funcionalidade.nome}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Página</f:facet>
+				<h:outputText value="#{funcionalidade.pagina}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Alterar</f:facet>
+				<h:commandLink value="altera" action="#{funcionalidadeController.carregar(funcionalidade)}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Remover</f:facet>
+				<h:commandLink value="remove" action="#{funcionalidadeController.remover(funcionalidade)}"/>
+			</h:column>
+		</h:dataTable>
+	</h:form>
+</h:body>
+
+</html>

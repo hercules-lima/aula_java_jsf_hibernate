@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://xmlns.jcp.org/jsf/html"
+	xmlns:f="http://xmlns.jcp.org/jsf/core">
+
+<h:head>
+	<title>Comanda</title>
+</h:head>
+
+<h:body>
+	<h1>Nova Comanda</h1>
+	<h:form>
+		<h:messages id="msg"/>
+	
+		<fieldset>
+			<legend>Dados da Comanda</legend>
+			<h:panelGrid>
+				<h:outputText value="Data" for="data" />
+				<h:inputText id="data" value="#{comandaController.comanda.dtComanda.time}"
+				required="true" requiredMessage="Data obrigatória.">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
+				</h:inputText>
+			</h:panelGrid>
+		</fieldset>
+
+		<fieldset>
+			<legend>Dados da Comanda</legend>
+
+			<h:panelGrid columns="5">
+				<h:outputText value="Produto" for="produto" />
+				<h:selectOneMenu id="produto" value="#{comandaController.produtoId}" 
+				required="true" requiredMessage="Produto obrigatório.">
+					<f:selectItem itemLabel="Selecionar" noSelectionOption="true"/>
+					<f:selectItems value="#{comandaController.todosProdutos}" var="produto" itemLabel="#{produto.nome}" itemValue="#{produto.id}"/>
+				</h:selectOneMenu>
+				
+				<h:outputText value="Quantidade" for="qtde" />
+				<h:inputText id="qtde" value="#{comandaController.qtde}"
+				required="true" requiredMessage="Quantidade obrigatória."/>
+				
+				<h:commandButton value="Gravar Item" action="#{comandaController.gravarItem}">
+					<f:ajax execute="produto qtde" 
+					render="msg produto qtde tabelaItens total" />
+				</h:commandButton>
+			</h:panelGrid>
+			
+			<h:dataTable value="#{comandaController.itensDaComanda}" var="item" 
+			id="tabelaItens">
+				<h:column>
+					<f:facet name="header">Nome</f:facet>
+					<h:outputText value="#{item.produto.nome}"/>
+				</h:column>
+						
+				<h:column>
+					<f:facet name="header">Valor Unitário</f:facet>
+					<h:outputText value="#{item.valorUnitario}"/>
+				</h:column>
+							
+				<h:column>
+					<f:facet name="header">Quantidade</f:facet>
+					<h:outputText id="qtde" value="#{item.qtde}" />
+				</h:column>
+						
+				<h:column>
+					<f:facet name="header">Remover</f:facet>
+					<h:commandLink value="X" action="#{comandaController.removerItem(item)}"
+					immediate="true"/>
+				</h:column>
+			</h:dataTable>
+			
+			<h:panelGrid columns="2">
+					<h:outputText value="Valor Total" for="total"/>
+					<h:outputText id="total" value="#{comandaController.comanda.valorTotal}"/>
+			</h:panelGrid>
+				
+			<h:commandButton value="Gravar" action="#{comandaController.gravar}">
+				<f:ajax execute="data" 
+				render="msg data tabelaItens total :formComandas:tabelaComandas"/>
+			</h:commandButton>
+		</fieldset>
+	</h:form>
+	
+	<h:form id="formComandas">
+		<h:dataTable value="#{comandaController.todasComandas}" 
+		id="tabelaComandas" var="comanda">
+			<h:column>
+				<f:facet name="header">Data</f:facet>
+				<h:outputText value="#{comanda.dtComanda.time}">
+					<f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo" />
+				</h:outputText>
+			</h:column>
+						
+			<h:column>
+				<f:facet name="header">Valor</f:facet>
+				<h:outputText value="#{comanda.valor}"/>
+			</h:column>
+			
+			<h:column>
+				<f:facet name="header">Alterar</f:facet>
+				<h:commandLink value="altera" action="#{comandaController.carregar(comanda)}"/>
+			</h:column>
+			
+			<h:column>
+			<f:facet name="header">Remover</f:facet>
+				<h:commandLink value="remove" action="#{comandaController.remover(comanda)}"/>
+			</h:column>
+			
+		</h:dataTable>
+		</h:form>
+</h:body>
+</html>
